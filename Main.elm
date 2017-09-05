@@ -1,10 +1,10 @@
 port module Main exposing (..)
 
 import Html exposing (..)
-import Html.Attributes as HA exposing (..)
-import Html.Events exposing (..)
 
 
+-- import Html.Attributes as HA exposing (..)
+-- import Html.Events exposing (..)
 -- import Http exposing (..)
 
 
@@ -57,7 +57,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [] []
+    div [] [ text "hello world" ]
 
 
 subscriptions : b -> Sub Msg
