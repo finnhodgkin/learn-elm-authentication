@@ -1,0 +1,25 @@
+{
+  "name": "learn-elm-authentication",
+  "version": "1.0.0",
+  "description": "Token based authentication with elm/hapi/postgres",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/start.js",
+    "elm": "elm-live ./Main.elm --output=./elm/js/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/finnhodgkin/learn-elm-authentication.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/finnhodgkin/learn-elm-authentication/issues"
+  },
+  "homepage": "https://github.com/finnhodgkin/learn-elm-authentication#readme",
+  "dependencies": {
+    "hapi": "^16.5.2",
+    "inert": "^4.2.1"
+  }
+}
