@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/finnhodgkin/learn-elm-authentication#readme",
   "dependencies": {
+    "env2": "^2.2.0",
     "hapi": "^16.5.2",
     "inert": "^4.2.1"
   }
