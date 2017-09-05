@@ -13,7 +13,7 @@ module.exports = {
 
         bcrypt
           .compare(password, res.rows[0].password)
-          .then(res => (res ? reply('yes') : reply('no')))
+          .then(res => (res ? reply({ auth: 'yes' }) : reply({ auth: 'no' })))
           .catch(err => reply('bad'));
       }
     );
