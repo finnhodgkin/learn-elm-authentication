@@ -31,7 +31,7 @@ init : Maybe String -> ( Model, Cmd Msg )
 init token =
     case token of
         Just token ->
-            Model "" "" token "" "" ! []
+            Model "" "" token "" "" ! [ validateToken token ]
 
         Nothing ->
             Model "" "" "" "" "" ! []
@@ -103,12 +103,23 @@ authUser model apiUrl =
 
 authUserCmd : Model -> String -> Cmd Msg
 authUserCmd model apiUrl =
-    Http.send LoggedIn (authUser model apiUrl)
+    authUser model apiUrl
+        |> Http.send LoggedIn
 
 
 tokenDecoder : Decoder String
 tokenDecoder =
     JD.field "auth" JD.string
+
+
+validateToken : String -> Cmd Msg
+validateToken token =
+    let
+        body =
+            JE.object [ ( "token", JE.string token ) ]
+                |> Http.jsonBody
+    in
+    Http.send LoggedIn (Http.post "/validate" body tokenDecoder)
 
 
 view : Model -> Html Msg
