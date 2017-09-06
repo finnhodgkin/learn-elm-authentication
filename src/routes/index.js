@@ -1,1 +1,7 @@
-module.exports = ['./public', './home', './register', './login'].map(require);
+module.exports = [
+  './public',
+  './home',
+  './register',
+  './login',
+  './validate',
+].map(require);

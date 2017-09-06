@@ -11,4 +11,10 @@ const createToken = user => {
   });
 };
 
-module.exports = { createToken };
+const verifyToken = token => {
+  const decoded = jwt.verify(token, secret);
+  console.log(decoded);
+  return decoded.id;
+};
+
+module.exports = { createToken, verifyToken };

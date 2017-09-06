@@ -27,11 +27,11 @@ module.exports = {
         reply({ auth: token });
       } catch (e) {
         console.log('Error inserting user into the database');
-        reply({ auth: 'no' });
+        reply({ error: 'no' });
       }
     } catch (e) {
       console.log('Error hashing password');
-      reply({ auth: 'no' });
+      reply({ error: 'no' });
     }
   },
 };

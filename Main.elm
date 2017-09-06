@@ -48,6 +48,7 @@ type Msg
     | UpdatePassword String
     | Register
     | LoggedIn (Result Error String)
+    | Verified (Result Error String)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -71,15 +72,27 @@ update msg model =
         LoggedIn response ->
             getResponse model response
 
+        Verified response ->
+            verifyToken model response
+
 
 getResponse : Model -> Result Http.Error String -> ( Model, Cmd Msg )
 getResponse model response =
     case response of
         Ok result ->
-            { model | log = result } ! []
+            { model | token = result, log = "LOGGED IN WOOP" } ! [ validateToken result ]
 
         Err error ->
-            { model | log = "" } ! []
+            { model | log = "BAD" } ! []
+
+
+verifyToken model response =
+    case response of
+        Ok result ->
+            { model | log = "VALIDATED" } ! []
+
+        Err error ->
+            { model | log = "BAD" } ! []
 
 
 userEncoder : Model -> JE.Value
@@ -119,7 +132,7 @@ validateToken token =
             JE.object [ ( "token", JE.string token ) ]
                 |> Http.jsonBody
     in
-    Http.send LoggedIn (Http.post "/validate" body tokenDecoder)
+    Http.send Verified (Http.post "/validate" body tokenDecoder)
 
 
 view : Model -> Html Msg

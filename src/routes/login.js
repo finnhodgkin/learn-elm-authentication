@@ -8,7 +8,7 @@ module.exports = {
   handler: async ({ payload: { username, password } }, reply) => {
     try {
       const userRows = await connection.query(
-        'SELECT password FROM users WHERE username = $1',
+        'SELECT id, password FROM users WHERE username = $1',
         [username]
       );
 
@@ -17,15 +17,17 @@ module.exports = {
         userRows.rows[0].password
       );
 
+      const user = { id: userRows.rows[0].id, username };
+
       if (validated) {
         const token = await createToken(user);
         reply({ auth: token });
       } else {
-        reply({ auth: 'no' });
+        reply({ error: 'no' });
       }
     } catch (err) {
       console.log(err);
-      reply({ auth: 'bad' });
+      reply({ error: 'bad' });
     }
   },
 };
