@@ -4,20 +4,18 @@ const connection = require('../database/db_connection.js');
 module.exports = {
   method: 'POST',
   path: '/register',
-  handler: (/*{ payload: { username, password } }*/ req, reply) => {
+  handler: async (/*{ payload: { username, password } }*/ req, reply) => {
     const { username, password } = req.payload;
-    bcrypt.hash(password, 10).then(hash => {
-      connection.query(
+    try {
+      const hash = await bcrypt.hash(password, 10);
+      await connection.query(
         'INSERT INTO users(username, password) VALUES ($1, $2)',
-        [username, hash],
-        (err, res) => {
-          if (err) {
-            reply({ auth: 'no' });
-          } else {
-            reply({ auth: 'yes' });
-          }
-        }
+        [username, hash]
       );
-    });
+      reply({ auth: 'yes' });
+    } catch (e) {
+      console.log(e);
+      reply({ auth: 'no' });
+    }
   },
 };
