@@ -1,21 +1,31 @@
 const bcrypt = require('bcrypt');
 const connection = require('../database/db_connection.js');
+const { createToken } = require('./../lib/helpers');
 
 module.exports = {
   method: 'POST',
   path: '/login',
-  handler: ({ payload: { username, password } }, reply) => {
-    connection.query(
-      'SELECT password FROM users WHERE username = $1',
-      [username],
-      (err, res) => {
-        if (err) console.log(err);
+  handler: async ({ payload: { username, password } }, reply) => {
+    try {
+      const userRows = await connection.query(
+        'SELECT password FROM users WHERE username = $1',
+        [username]
+      );
 
-        bcrypt
-          .compare(password, res.rows[0].password)
-          .then(res => (res ? reply({ auth: 'yes' }) : reply({ auth: 'no' })))
-          .catch(err => reply('bad'));
+      const validated = await bcrypt.compare(
+        password,
+        userRows.rows[0].password
+      );
+
+      if (validated) {
+        const token = await createToken(user);
+        reply({ auth: token });
+      } else {
+        reply({ auth: 'no' });
       }
-    );
+    } catch (err) {
+      console.log(err);
+      reply({ auth: 'bad' });
+    }
   },
 };

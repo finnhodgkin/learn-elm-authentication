@@ -2,7 +2,7 @@ const hapi = require('hapi');
 const inert = require('inert');
 const routes = require('./routes');
 
-require('env2')('.env');
+require('env2')('config.env');
 
 const server = new hapi.Server();
 
