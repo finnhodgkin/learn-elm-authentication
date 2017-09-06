@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const connection = require('../database/db_connection.js');
+const { sign } = require('../lib/jwt-helpers');
 
 module.exports = {
   method: 'POST',
@@ -12,7 +13,7 @@ module.exports = {
         'INSERT INTO users(username, password) VALUES ($1, $2)',
         [username, hash]
       );
-      reply({ auth: 'yes' });
+      reply({ auth: sign({ username }) });
     } catch (e) {
       console.log(e);
       reply({ auth: 'no' });

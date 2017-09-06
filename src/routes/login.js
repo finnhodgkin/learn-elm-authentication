@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const connection = require('../database/db_connection.js');
+const { sign } = require('../lib/jwt-helpers');
 
 module.exports = {
   method: 'POST',
@@ -13,7 +14,7 @@ module.exports = {
         [username]
       );
       const isValid = await bcrypt.compare(password, hash);
-      isValid ? reply({ auth: 'yes' }) : reply({ auth: 'no' });
+      isValid ? reply({ auth: sign({ username }) }) : reply({ auth: 'no' });
     } catch (e) {
       console.log(e);
       reply({ auth: 'bad' });
